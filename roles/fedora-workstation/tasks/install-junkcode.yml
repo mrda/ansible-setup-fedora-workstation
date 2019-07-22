@@ -1,0 +1,22 @@
+---
+  - name: Create directories
+    file:
+      path: "{{ item }}"
+      state: directory
+    loop:
+      - '~/tmp/src'
+
+  - name: Clone my junkcode repo
+    git:
+      repo: 'git@github.com:mrda/junkcode.git'
+      dest: '~/src/junkcode'
+
+  - name: Set up my junkcode
+    shell: ~/src/junkcode/setup_path.sh
+
+  - name: Set up my bash completions
+    become: yes
+    copy:
+      src: "{{ item }}"
+      dest: /etc/bash_completion.d
+    with_fileglob: "~/src/junkcode/bash_completion.d/*"

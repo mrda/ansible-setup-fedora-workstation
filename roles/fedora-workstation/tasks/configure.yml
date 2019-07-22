@@ -1,0 +1,28 @@
+---
+  - name: Enable sshd
+    service:
+      name: sshd
+      enabled: yes
+      state: started
+
+  - name: Update GNOME dconf settings
+    dconf:
+      key: "{{item.key}}"
+      value: "{{item.value}}"
+    loop:
+      - {key: '/org/gnome/terminal/legacy/headerbar', value: '@mb false'}
+
+  - name: Fix the default TCP firewall
+    become: yes
+    firewalld:
+      port: 1025-65535/tcp
+      permanent: yes
+      state: disabled
+
+  - name: Fix the default UDP firewall
+    become: yes
+    firewalld:
+      port: 1025-65535/udp
+      permanent: yes
+      state: disabled
+

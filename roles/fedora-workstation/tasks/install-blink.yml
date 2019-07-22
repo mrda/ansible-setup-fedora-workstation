@@ -1,0 +1,26 @@
+---
+  - name: Clone blink1-tool repo
+    git:
+      repo: 'https://github.com/todbot/blink1-tool.git'
+      dest: '~/src/blink1-tool'
+
+  - name: Set up udev rule for blink1-tool
+    become: yes
+    get_url:
+      url: 'https://raw.githubusercontent.com/todbot/blink1/master/linux/51-blink1.rules dest=/etc/udev/rules.d/51-blink1.rules'
+      dest: /etc/udev/rules.d/51-blink1.rules
+
+  - name: Compile blink1-tool
+    make:
+      chdir: '~/src/blink1-tool'
+
+  - name: Grab the OS
+    shell: uname
+    register: uname_output
+
+  - name: Grab the arch
+    shell: arch
+    register: arch_output
+
+  - name: Install blink1-tool
+    copy: src=~/src/blink1-tool/blink1-tool dest=~/bin/{{ arch_output.stdout}}/{{ uname_output.stdout }}/blink1-tool

@@ -1,0 +1,91 @@
+---
+# Remove unwanted GNOME packages, and fix configuration.
+# Based on https://eklitzke.org/lobotomizing-gnome and
+# https://twitter.com/mrda_/status/1151634298065149952
+
+  - name: Install Google Chrome repo
+    become: yes
+    copy: src=google-chrome.repo dest=/etc/yum.repos.d/
+
+  - name: Import Google Chrome signing key
+    become: yes
+    rpm_key: key=https://dl-ssl.google.com/linux/linux_signing_key.pub state=present
+
+  - name: Install Google Chrome
+    become: yes
+    dnf:
+      name: google-chrome-stable
+      state: present
+
+  - name: Install Simplenote
+    become: yes
+    dnf:
+      name: 'https://github.com/Automattic/simplenote-electron/releases/download/v1.6.0/Simplenote-linux-1.6.0-x86_64.rpm'
+      state: present
+
+  - name: Install LastPass
+    become: yes
+    dnf:
+      name: lastpass-cli
+      state: present
+
+  - name: Install python packages
+    become: yes
+    dnf:
+      name:
+        - python-devel
+        - python3-devel
+        - python3-psutil
+        - python-pygments
+      state: present
+
+  - name: Install virt packages
+    become: yes
+    dnf:
+      name:
+        - libvirt
+        - libvirt-devel
+        - virt-install
+      state: present
+
+  - name: Install more packages
+    become: yes
+    dnf:
+      name:
+        - NetworkManager-openvpn
+        - NetworkManager-openvpn-gnome
+        - libselinux-python
+        - ack
+        - ipmitool
+        - vim-X11
+        - libusb-devel
+      state: present
+
+  - name: Remove GNOME bloat
+    become: yes
+    dnf:
+      name:
+        - cheese
+        - evolution
+        - evolution-ews
+        - evolution-help
+        - gfbgraph
+        - gnome-boxes
+        - gnome-calendar
+        - gnome-contacts
+        - gnome-dictionary
+        - gnome-documents
+        - gnome-getting-started-docs
+        - gnome-initial-setup
+        - gnome-maps
+        - gnome-online-miners
+        - gnome-photos
+        - gnome-user-docs
+        - gnome-user-share
+        - gnome-video-effects
+        - gnome-weather
+        - totem
+        - tracker-miners
+        - yelp
+      state: absent
+
