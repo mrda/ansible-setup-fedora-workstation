@@ -85,7 +85,6 @@
         - gnome-video-effects
         - gnome-weather
         - totem
-        - tracker-miners
         - yelp
       state: absent
 
